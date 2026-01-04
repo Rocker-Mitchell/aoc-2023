@@ -1,0 +1,8 @@
+[package]
+name = "aoc-framework"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+aoc-framework-macros = { path = "../aoc-framework-macros" }
+thiserror.workspace = true

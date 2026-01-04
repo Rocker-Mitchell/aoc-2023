@@ -1,0 +1,12 @@
+# cargo generated compiled files and executables
+/debug
+/target
+
+# rustfmt generated backup files
+**/*.rs.bk
+
+# MSVC Windows builds of rustc generate files storing debugging information
+*.pdb
+
+# discouraged from tracking copies of inputs from Advent of Code
+/inputs

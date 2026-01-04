@@ -1,0 +1,70 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cargo",
+			"command": "test",
+			"args": [
+				"--workspace",
+				"--",
+				"--test",
+				"--no-capture"
+			],
+			"problemMatcher": [
+				"$rustc"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"label": "rust: cargo test workspace"
+		},
+		{
+			"type": "cargo",
+			"command": "clippy",
+			"args": [
+				"--workspace",
+				"--all-targets"
+			],
+			"problemMatcher": [
+				"$rustc"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"group": "none",
+			"label": "rust: cargo clippy workspace"
+		},
+		{
+			"type": "cargo",
+			"command": "fmt",
+			"args": [
+				"--",
+				"--files-with-diff"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"group": "none",
+			"label": "rust: cargo fmt"
+		}
+	]
+}

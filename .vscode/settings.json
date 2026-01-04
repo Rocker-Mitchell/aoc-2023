@@ -1,0 +1,12 @@
+{
+    "cSpell.words": [
+        "subsec",
+        "thiserror"
+    ],
+    "rust-analyzer.check.command": "clippy",
+    "[rust]": {
+        "editor.rulers": [100],
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+        "editor.formatOnSave": true
+    }
+}

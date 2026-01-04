@@ -1,0 +1,23 @@
+[workspace]
+members = ["aoc-framework", "aoc-framework-macros"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+
+[workspace.dependencies]
+thiserror = "2.0"
+
+[package]
+name = "aoc-2023"
+version.workspace = true
+edition.workspace = true
+publish = false
+
+[dependencies]
+anyhow = "1.0.100"
+aoc-framework = { path = "aoc-framework" }
+checked_sum = "0.1.0"
+clap = { version = "4.5.53", features = ["derive"] }
+regex = "1.12.2"
+thiserror.workspace = true
