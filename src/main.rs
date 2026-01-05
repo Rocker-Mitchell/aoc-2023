@@ -28,6 +28,7 @@ use aoc_framework::PartKind;
 use aoc_framework::runner::OutputHandler;
 use clap::{ArgAction, Parser};
 
+mod checked_product;
 mod solutions;
 
 /// Advent of Code 2023 puzzle solver.
