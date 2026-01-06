@@ -22,6 +22,7 @@ use thiserror::Error;
 // --- IMPORT SUBMODULES HERE ---
 mod day01;
 mod day02;
+mod day03;
 
 /// A structure collecting solutions by day.
 ///
@@ -66,6 +67,7 @@ pub fn run_day(
         // --- MATCH SOLUTIONS HERE ---
         1 => AdventOfCode2023::<1>::run(input, handler, timed),
         2 => AdventOfCode2023::<2>::run(input, handler, timed),
+        3 => AdventOfCode2023::<3>::run(input, handler, timed),
         _ => Err(DayNotAvailable(day).into()),
     }
 }

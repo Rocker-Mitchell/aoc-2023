@@ -19,6 +19,7 @@ anyhow = "1.0.100"
 aoc-framework = { path = "aoc-framework" }
 checked_sum = "0.1.0"
 clap = { version = "4.5.53", features = ["derive"] }
+nalgebra = "0.34.1"
 num-traits = "0.2.19"
 regex = "1.12.2"
 thiserror.workspace = true
