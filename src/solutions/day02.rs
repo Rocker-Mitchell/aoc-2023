@@ -180,7 +180,7 @@ impl ParseData for Games {
         Self: Sized,
     {
         let game_data_parser = GameDataParser::new();
-        let games = parse_lines_with_offset(input, 0, |line| game_data_parser.parse(line))
+        let games = parse_lines_with_offset(input, 0, |_, line| game_data_parser.parse(line))
             .collect::<Result<_, _>>()?;
         Ok(Self(games))
     }

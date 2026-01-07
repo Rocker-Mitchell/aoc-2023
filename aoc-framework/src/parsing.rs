@@ -54,8 +54,9 @@ pub struct InvalidLine {
 /// - `input` - The input string to parse.
 /// - `offset` - An offset to add to the line index for [`InvalidLine`] errors. Useful when parsing
 ///   a later slice of input and errors should have any reported line index reflect the offset line
-///   position from the original input. Set to `0` if no offset is needed.
-/// - `parser` - A closure that takes a line string and returns a [`DynamicResult`].
+///   position from the original input. This offset is not applied to the index passed to `parser`.
+///   Set to `0` if no offset is needed.
+/// - `parser` - A closure that takes a line's index and string, returning a [`DynamicResult`].
 ///
 /// # Errors
 ///
@@ -70,10 +71,10 @@ pub fn parse_lines_with_offset<T, F>(
     mut parser: F,
 ) -> impl Iterator<Item = Result<T, InvalidLine>>
 where
-    F: FnMut(&str) -> DynamicResult<T>,
+    F: FnMut(usize, &str) -> DynamicResult<T>,
 {
     input.lines().enumerate().map(move |(index, line)| {
-        parser(line).map_err(|source| InvalidLine {
+        parser(index, line).map_err(|source| InvalidLine {
             line_index: index.saturating_add(offset),
             source,
         })

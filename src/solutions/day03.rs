@@ -71,11 +71,8 @@ impl ParseData for Schematic {
     where
         Self: Sized,
     {
-        // TODO this need for line_idx makes me question if parse_lines_with_offset should pass the
-        // index generally; callers can ignore it with `_`
-        let mut line_idx: usize = 0;
         let mut first_line_length = None;
-        let (symbols, numbers) = parse_lines_with_offset(input, 0, |line| {
+        let (symbols, numbers) = parse_lines_with_offset(input, 0, |line_idx, line| {
             fn create_coords(char_idx: usize, line_idx: usize) -> Point2<Dimension> {
                 let x = Dimension::try_from(char_idx)
                     .expect("largest character index from input should fit within dimension type");
@@ -157,9 +154,6 @@ impl ParseData for Schematic {
                 &mut digit_sequence,
                 &mut numbers,
             );
-
-            // tracking line index externally of parse lines function
-            line_idx = line_idx.saturating_add(1);
 
             Ok((symbols, numbers))
         })
