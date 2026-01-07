@@ -8,7 +8,9 @@ use regex::Regex;
 
 use crate::checked_product::CheckedProduct;
 
-#[solution_runner(name = "Day 2: Cube Conundrum", parsed = Games, part_one = Day02, part_two = Day02)]
+#[solution_runner(
+    name = "Day 2: Cube Conundrum", parsed = Games, part_one = Day02, part_two = Day02
+)]
 impl super::AdventOfCode2023<2> {}
 
 #[derive(thiserror::Error, Debug)]

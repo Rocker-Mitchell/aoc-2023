@@ -6,7 +6,9 @@ use aoc_framework::{DynamicResult, ParseData, PartOne, PartTwo, Solution};
 use checked_sum::CheckedSum;
 use nalgebra::Point2;
 
-#[solution_runner(name = "Day 3: Gear Ratios", parsed = Schematic, part_one = Day03, part_two = Day03)]
+#[solution_runner(
+    name = "Day 3: Gear Ratios", parsed = Schematic, part_one = Day03, part_two = Day03
+)]
 impl super::AdventOfCode2023<3> {}
 
 #[derive(thiserror::Error, Debug)]
