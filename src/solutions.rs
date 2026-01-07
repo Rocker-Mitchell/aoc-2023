@@ -23,6 +23,7 @@ use thiserror::Error;
 mod day01;
 mod day02;
 mod day03;
+mod day04;
 
 /// A structure collecting solutions by day.
 ///
@@ -68,6 +69,7 @@ pub fn run_day(
         1 => AdventOfCode2023::<1>::run(input, handler, timed),
         2 => AdventOfCode2023::<2>::run(input, handler, timed),
         3 => AdventOfCode2023::<3>::run(input, handler, timed),
+        4 => AdventOfCode2023::<4>::run(input, handler, timed),
         _ => Err(DayNotAvailable(day).into()),
     }
 }
