@@ -1,4 +1,5 @@
 use std::collections::{HashSet, VecDeque};
+use std::iter;
 
 use aoc_framework::parsing::{parse_lines_with_offset, parse_with_context};
 use aoc_framework::runner::solution_runner;
@@ -158,7 +159,9 @@ impl Solution<PartTwo> for Day04 {
         let number_cards = input.0.len();
         for (card_index, card) in input.0.iter().enumerate() {
             // find amount of instances of card: the original we're currently processing plus copies
-            // generated; pop the copies for next loop
+            // generated
+            // - front would track copies generated for this loop step, pop it or default to 0
+            //   copies
             let instances = 1 + copies_deque.pop_front().unwrap_or(0);
 
             // sum total instances of cards processed
@@ -166,26 +169,29 @@ impl Solution<PartTwo> for Day04 {
                 .checked_add(instances)
                 .expect("should not have integer overflow during summation");
 
-            // skip the following on the last loop
-            if card_index < number_cards - 1 {
-                // generate subsequent copies and add back to deque for next loop
-                // - instances informs how many copies are made
-                // - match_count dictates the range of subsequent cards copied
-                let match_count = card.match_count();
-                let copies_to_add = vec![instances; match_count];
-
-                if !copies_to_add.is_empty() {
-                    // mutate deque indexes up to the smaller index between collections
-                    let split_idx = copies_to_add.len().min(copies_deque.len());
-                    for (copy_index, &generated_copies) in
-                        copies_to_add.iter().take(split_idx).enumerate()
-                    {
-                        copies_deque[copy_index] += generated_copies;
+            // generate subsequent copies and add into deque for next loop
+            // - instances informs how many copies of an individual card are made
+            let subsequent_cards_count = number_cards - 1 - card_index;
+            if subsequent_cards_count > 0 {
+                // match count is the desired range of subsequent cards to copy, but limit to
+                // subsequent cards available
+                let copies_to_make = card.match_count().min(subsequent_cards_count);
+                if copies_to_make > 0 {
+                    // mutate deque indexes by adding the amount of copies
+                    // - limit to length of deque
+                    let limited_copy_count = copies_to_make.min(copies_deque.len());
+                    for copy_count in copies_deque.iter_mut().take(limited_copy_count) {
+                        *copy_count = copy_count
+                            .checked_add(instances)
+                            .expect("should not have integer overflow during copy count increment");
                     }
 
-                    // extend deque with any remainder from copies to add
-                    if copies_to_add.len() > split_idx {
-                        copies_deque.extend(&copies_to_add[split_idx..]);
+                    // extend deque with any remainder that couldn't fit in deque length
+                    if copies_to_make > limited_copy_count {
+                        copies_deque.extend(iter::repeat_n(
+                            instances,
+                            copies_to_make - limited_copy_count,
+                        ));
                     }
                 }
             }
