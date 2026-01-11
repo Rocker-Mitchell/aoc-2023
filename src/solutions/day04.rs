@@ -1,7 +1,7 @@
 use std::collections::{HashSet, VecDeque};
 use std::iter;
 
-use aoc_framework::parsing::{parse_lines_with_offset, parse_with_context};
+use aoc_framework::parsing::{parse_input_lines, parse_with_context};
 use aoc_framework::runner::solution_runner;
 use aoc_framework::{DynamicResult, ParseData, PartOne, PartTwo, Solution};
 use checked_sum::CheckedSum;
@@ -67,7 +67,7 @@ impl ParseData for ScratchcardTable {
             Ok(numbers)
         }
 
-        let cards = parse_lines_with_offset(input, 0, |_, line| {
+        let cards = parse_input_lines(input, |_, line| -> DynamicResult<Scratchcard> {
             let (_, card_numbers_str) = line.split_once(':').ok_or(Day04Error::NoColonDelimiter)?;
 
             let (winning_numbers_str, scratched_numbers_str) = card_numbers_str

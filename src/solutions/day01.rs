@@ -1,4 +1,4 @@
-use aoc_framework::parsing::parse_lines_with_offset;
+use aoc_framework::parsing::parse_input_lines;
 use aoc_framework::runner::solution_runner;
 use aoc_framework::{DynamicResult, PartOne, PartTwo, Solution};
 use checked_sum::CheckedSum;
@@ -62,10 +62,9 @@ impl Solution<PartOne> for Day01 {
     type Output = u16;
 
     fn solve(input: &Self::Input) -> DynamicResult<Self::Output> {
-        let values: Vec<CalibrationValue> = parse_lines_with_offset(input, 0, |_, line| {
-            Ok(parse_calibration_value_by_digit(line)?)
-        })
-        .collect::<Result<_, _>>()?;
+        let values: Vec<CalibrationValue> =
+            parse_input_lines(input, |_, line| parse_calibration_value_by_digit(line))
+                .collect::<Result<_, _>>()?;
         let sum = sum_calibration_values(values.into_iter());
         Ok(sum)
     }
@@ -127,11 +126,12 @@ impl Solution<PartTwo> for Day01 {
 
         let re = Regex::new(PATTERN).expect("pattern should be valid");
 
-        let values: Vec<CalibrationValue> = parse_lines_with_offset(input, 0, |_, line| {
-            let (first, last) = extract_calibration_digits_or_names(line, &re)?;
-            let first_digit = number_token_to_integer(&first);
-            let last_digit = number_token_to_integer(&last);
-            Ok(calibration_value(first_digit, last_digit))
+        let values: Vec<CalibrationValue> = parse_input_lines(input, |_, line| {
+            extract_calibration_digits_or_names(line, &re).map(|(first, last)| {
+                let first_digit = number_token_to_integer(&first);
+                let last_digit = number_token_to_integer(&last);
+                calibration_value(first_digit, last_digit)
+            })
         })
         .collect::<Result<_, _>>()?;
 

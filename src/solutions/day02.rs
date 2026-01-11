@@ -1,6 +1,6 @@
 use std::cmp;
 
-use aoc_framework::parsing::{parse_lines_with_offset, parse_with_context};
+use aoc_framework::parsing::{parse_input_lines, parse_with_context};
 use aoc_framework::runner::solution_runner;
 use aoc_framework::{DynamicResult, ParseData, PartOne, PartTwo, Solution};
 use checked_sum::CheckedSum;
@@ -182,7 +182,7 @@ impl ParseData for Games {
         Self: Sized,
     {
         let game_data_parser = GameDataParser::new();
-        let games = parse_lines_with_offset(input, 0, |_, line| game_data_parser.parse(line))
+        let games = parse_input_lines(input, |_, line| game_data_parser.parse(line))
             .collect::<Result<_, _>>()?;
         Ok(Self(games))
     }

@@ -5,7 +5,7 @@ use std::str::{FromStr, Lines};
 
 use thiserror::Error;
 
-use crate::{DynamicError, DynamicResult};
+use crate::DynamicError;
 
 /// A string parsing error with context of the string that was being parsed.
 #[derive(Error, Debug)]
@@ -63,38 +63,32 @@ impl InvalidLine {
     }
 }
 
-/// Parse lines with a closure, mapping any line's dynamic error with an [`InvalidLine`].
+/// Parse input lines to an iterator of results.
 ///
 /// # Arguments
 /// - `input` - The input string to parse.
-/// - `offset` - An offset to add to the line index for [`InvalidLine`] errors. Useful when parsing
-///   a later slice of input and errors should have any reported line index reflect the offset line
-///   position from the original input. This offset is not applied to the index passed to `parser`.
-///   Set to `0` if no offset is needed.
-/// - `parser` - A closure that takes a line's index and string, returning a [`DynamicResult`].
+/// - `parser` - A closure that takes a line's index and string, returning a result.
 ///
 /// # Errors
 ///
-/// If parsing a line fails, an [`InvalidLine`] error is returned, sourcing the original error.
+/// If parsing a line fails, its error is tracked as the source of an [`InvalidLine`] error.
 ///
 /// # Returns
 ///
-/// An iterable of parsing results for each line.
-pub fn parse_lines_with_offset<T, F>(
+/// An iterator of parsing results for each line.
+pub fn parse_input_lines<T, F, E>(
     input: &str,
-    offset: usize,
     mut parser: F,
 ) -> impl Iterator<Item = Result<T, InvalidLine>>
 where
-    F: FnMut(usize, &str) -> DynamicResult<T>,
+    F: FnMut(usize, &str) -> Result<T, E>,
+    E: Into<DynamicError>,
 {
-    input.lines().enumerate().map(move |(index, line)| {
-        parser(index, line).map_err(|source| InvalidLine {
-            line_index: index.saturating_add(offset),
-            source,
-        })
-    })
-} // TODO refactor to not use offset, expect whole input to parse
+    input
+        .lines()
+        .enumerate()
+        .map(move |(index, line)| parser(index, line).map_err(|e| InvalidLine::new(e, index)))
+}
 
 /// A utility to scan through lines of input, supporting processing of individual lines or blocks
 /// separated by empty lines.
@@ -139,13 +133,16 @@ impl<'a> InputScanner<'a> {
     ///
     /// Useful for scanning the first line of a block.
     ///
+    /// # Arguments
+    /// - `parser` - A closure that takes a line's index and string, returning a result.
+    ///
     /// # Errors
     ///
-    /// If parsing returns an error, it is tracked as the source of an [`InvalidLine`] error.
+    /// If parsing fails, its error is tracked as the source of an [`InvalidLine`] error.
     ///
     /// # Returns
     ///
-    /// Returns `Some` containing the result of parsing.
+    /// Returns `Some` containing the successful result of parsing.
     /// If the remaining lines scanned were empty or there are no more lines to scan, returns
     /// `None`.
     pub fn next_item<T, F, E>(&mut self, mut parser: F) -> Result<Option<T>, InvalidLine>
@@ -169,13 +166,16 @@ impl<'a> InputScanner<'a> {
     /// If the next line is empty, the line will not be consumed.
     /// Useful for detecting the end of a block.
     ///
+    /// # Arguments
+    /// - `parser` - A closure that takes a line's index and string, returning a result.
+    ///
     /// # Errors
     ///
-    /// If parsing returns an error, it is tracked as the source of an [`InvalidLine`] error.
+    /// If parsing fails, its error is tracked as the source of an [`InvalidLine`] error.
     ///
     /// # Returns
     ///
-    /// Returns `Some` containing the result of parsing.
+    /// Returns `Some` containing the successful result of parsing.
     /// If the next line was empty or there are no more lines to scan, returns `None`.
     pub fn next_in_sequence<T, F, E>(&mut self, mut parser: F) -> Result<Option<T>, InvalidLine>
     where
@@ -202,7 +202,7 @@ impl<'a> InputScanner<'a> {
     ///
     /// # Errors
     ///
-    /// If parsing a line returns an error, it is tracked as the source of an [`InvalidLine`] error.
+    /// If parsing a line fails, its error is tracked as the source of an [`InvalidLine`] error.
     ///
     /// # Returns
     ///

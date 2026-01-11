@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use aoc_framework::parsing::parse_lines_with_offset;
+use aoc_framework::parsing::parse_input_lines;
 use aoc_framework::runner::solution_runner;
 use aoc_framework::{DynamicResult, ParseData, PartOne, PartTwo, Solution};
 use checked_sum::CheckedSum;
@@ -74,7 +74,7 @@ impl ParseData for Schematic {
         Self: Sized,
     {
         let mut first_line_length = None;
-        let (symbols, numbers) = parse_lines_with_offset(input, 0, |line_idx, line| {
+        let (symbols, numbers) = parse_input_lines(input, |line_idx, line| {
             fn create_coords(char_idx: usize, line_idx: usize) -> Point2<Dimension> {
                 let x = Dimension::try_from(char_idx)
                     .expect("largest character index from input should fit within dimension type");
@@ -109,8 +109,7 @@ impl ParseData for Schematic {
                     return Err(Day03Error::MismatchedLineLength {
                         first_length: expected_length,
                         found: line.len(),
-                    }
-                    .into());
+                    });
                 }
             } else {
                 first_line_length = Some(line.len());
@@ -161,13 +160,12 @@ impl ParseData for Schematic {
         })
         .try_fold(
             (Vec::new(), Vec::new()),
-            |(mut acc_symbols, mut acc_numbers),
-             result|
-             -> DynamicResult<(Vec<SchematicSymbol>, Vec<SchematicNumber>)> {
-                let (symbols, numbers) = result?;
-                acc_symbols.extend(symbols);
-                acc_numbers.extend(numbers);
-                Ok((acc_symbols, acc_numbers))
+            |(mut acc_symbols, mut acc_numbers), result| {
+                result.map(|(symbols, numbers)| {
+                    acc_symbols.extend(symbols);
+                    acc_numbers.extend(numbers);
+                    (acc_symbols, acc_numbers)
+                })
             },
         )?;
 
