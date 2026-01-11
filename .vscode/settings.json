@@ -2,6 +2,7 @@
     "cSpell.words": [
         "deque",
         "nalgebra",
+        "peekable",
         "subsec",
         "thiserror"
     ],
