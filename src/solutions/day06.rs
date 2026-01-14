@@ -7,7 +7,12 @@ use aoc_framework::{DynamicResult, ParseData, PartOne, PartTwo, Solution};
 
 use crate::checked_product::CheckedProduct;
 
-#[solution_runner(name = "Day 6: Wait For It", parsed = RaceInput, part_one = Day06, part_two = Day06)]
+#[solution_runner(
+    name = "Day 6: Wait For It",
+    parsed = RaceInput,
+    part_one = Day06,
+    part_two = Day06
+)]
 impl super::AdventOfCode2023<6> {}
 
 /*
