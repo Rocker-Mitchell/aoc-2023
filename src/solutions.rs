@@ -13,7 +13,7 @@
 //! 1 => AdventOfCode2023::<1>::run(input, handler, timed),
 //! ```
 
-#![warn(clippy::print_stderr, clippy::print_stdout)]
+#![warn(clippy::dbg_macro, clippy::print_stderr, clippy::print_stdout)]
 
 use aoc_framework::DynamicResult;
 use aoc_framework::runner::{OutputHandler, SolutionRunner};
@@ -27,6 +27,7 @@ mod day04;
 mod day05;
 mod day06;
 mod day07;
+mod day08;
 
 /// A structure collecting solutions by day.
 ///
@@ -76,6 +77,7 @@ pub fn run_day(
         5 => AdventOfCode2023::<5>::run(input, handler, timed),
         6 => AdventOfCode2023::<6>::run(input, handler, timed),
         7 => AdventOfCode2023::<7>::run(input, handler, timed),
+        8 => AdventOfCode2023::<8>::run(input, handler, timed),
         _ => Err(DayNotAvailable(day).into()),
     }
 }
