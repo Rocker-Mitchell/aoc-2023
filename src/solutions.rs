@@ -28,6 +28,7 @@ mod day05;
 mod day06;
 mod day07;
 mod day08;
+mod day09;
 
 /// A structure collecting solutions by day.
 ///
@@ -78,6 +79,7 @@ pub fn run_day(
         6 => AdventOfCode2023::<6>::run(input, handler, timed),
         7 => AdventOfCode2023::<7>::run(input, handler, timed),
         8 => AdventOfCode2023::<8>::run(input, handler, timed),
+        9 => AdventOfCode2023::<9>::run(input, handler, timed),
         _ => Err(DayNotAvailable(day).into()),
     }
 }
