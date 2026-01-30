@@ -6,11 +6,13 @@
 //! 1. Make a submodule to hold the solution implementation.
 //! 2. Have the submodule implement [`AdventOfCode2023<DAY>`] for its day as a [`SolutionRunner`].
 //! 3. Import the submodule below `IMPORT SUBMODULES HERE`
-//! 4. Add a match case to run [`AdventOfCode2023<DAY>`] for a day, below `MATCH SOLUTIONS HERE`:
+//! 4. Add a match arm to run [`AdventOfCode2023<DAY>`] for its day, below `MATCH SOLUTIONS HERE`:
 //!
 //! ```ignore
-//! // matching for day 1
-//! 1 => AdventOfCode2023::<1>::run(input, handler, timed),
+//! // support matching for day 1
+//! match_solutions!(day, input, handler, timed; 1)
+//! // add match arm for day 2
+//! match_solutions!(day, input, handler, timed; 1, 2)
 //! ```
 
 #![warn(clippy::dbg_macro, clippy::print_stderr, clippy::print_stdout)]
@@ -62,6 +64,18 @@ struct AdventOfCode2023<const DAY: u8>;
 #[error("no solution available for day {0}")]
 pub struct DayNotAvailable(u8);
 
+/// Emit a complete match block over `day` to run solutions with arms for the given day literals.
+macro_rules! match_solutions {
+    ($day_var:ident, $input:ident, $handler:ident, $timed:ident; $( $day:literal ),* $(,)? ) => {
+        match $day_var {
+            $(
+                $day => AdventOfCode2023::<$day>::run($input, $handler, $timed),
+            )*
+            _ => Err(DayNotAvailable($day_var).into()),
+        }
+    };
+}
+
 /// Run a solution based on the day.
 ///
 /// # Errors
@@ -75,23 +89,6 @@ pub fn run_day(
     handler: &mut dyn OutputHandler,
     timed: bool,
 ) -> DynamicResult<()> {
-    match day {
-        // --- MATCH SOLUTIONS HERE ---
-        1 => AdventOfCode2023::<1>::run(input, handler, timed),
-        2 => AdventOfCode2023::<2>::run(input, handler, timed),
-        3 => AdventOfCode2023::<3>::run(input, handler, timed),
-        4 => AdventOfCode2023::<4>::run(input, handler, timed),
-        5 => AdventOfCode2023::<5>::run(input, handler, timed),
-        6 => AdventOfCode2023::<6>::run(input, handler, timed),
-        7 => AdventOfCode2023::<7>::run(input, handler, timed),
-        8 => AdventOfCode2023::<8>::run(input, handler, timed),
-        9 => AdventOfCode2023::<9>::run(input, handler, timed),
-        10 => AdventOfCode2023::<10>::run(input, handler, timed),
-        11 => AdventOfCode2023::<11>::run(input, handler, timed),
-        12 => AdventOfCode2023::<12>::run(input, handler, timed),
-        13 => AdventOfCode2023::<13>::run(input, handler, timed),
-        14 => AdventOfCode2023::<14>::run(input, handler, timed),
-        15 => AdventOfCode2023::<15>::run(input, handler, timed),
-        _ => Err(DayNotAvailable(day).into()),
-    }
+    // --- MATCH SOLUTIONS HERE ---
+    match_solutions!(day, input, handler, timed; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
 }
