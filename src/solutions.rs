@@ -37,6 +37,7 @@ mod day12;
 mod day13;
 mod day14;
 mod day15;
+mod day16;
 
 /// A structure collecting solutions by day.
 ///
@@ -90,5 +91,8 @@ pub fn run_day(
     timed: bool,
 ) -> DynamicResult<()> {
     // --- MATCH SOLUTIONS HERE ---
-    match_solutions!(day, input, handler, timed; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
+    match_solutions!(
+        day, input, handler, timed;
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+    )
 }
