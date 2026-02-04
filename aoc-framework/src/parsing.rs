@@ -19,6 +19,19 @@ where
     source: E,
 }
 
+impl<E> ParseContextError<E>
+where
+    E: std::error::Error,
+{
+    /// Create a parse context error with a given source error and the string that caused the error.
+    pub fn new(source: E, string: &str) -> Self {
+        Self {
+            string: string.to_string(),
+            source,
+        }
+    }
+}
+
 /// Parse a string slice into another type.
 ///
 /// This wraps [`str::parse`] and maps errors to [`ParseContextError`].
@@ -33,10 +46,9 @@ where
     F: FromStr,
     F::Err: std::error::Error,
 {
-    string.parse::<F>().map_err(|source| ParseContextError {
-        string: string.to_string(),
-        source,
-    })
+    string
+        .parse::<F>()
+        .map_err(|source| ParseContextError::new(source, string))
 }
 
 /// A line in an input string caused a parsing error.
