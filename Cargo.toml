@@ -22,5 +22,6 @@ clap = { version = "4.5.53", features = ["derive"] }
 float_eq = "1.0.1"
 nalgebra = "0.34.1"
 num-traits = "0.2.19"
+petgraph = "0.8.3"
 regex = "1.12.2"
 thiserror.workspace = true
